@@ -389,8 +389,8 @@ public class GroovyBeanDefinitionReader extends AbstractBeanDefinitionReader imp
 			return new RuntimeBeanReference(refName, parentRef);
 		}
 		else if (this.namespaces.containsKey(name) && args.length > 0 && (args[0] instanceof Closure)) {
-			GroovyDynamicElementReader reader = createDynamicElementReader(name);
-			reader.invokeMethod("doCall", args);
+//			GroovyDynamicElementReader reader = createDynamicElementReader(name);
+//			reader.invokeMethod("doCall", args);
 		}
 		else if (args.length > 0 && args[0] instanceof Closure) {
 			// abstract bean definition
@@ -647,65 +647,65 @@ public class GroovyBeanDefinitionReader extends AbstractBeanDefinitionReader imp
 	 * properties from the {@code GroovyBeanDefinitionReader} itself
 	 * </ul>
 	 */
-	public Object getProperty(String name) {
-		Binding binding = getBinding();
-		if (binding != null && binding.hasVariable(name)) {
-			return binding.getVariable(name);
-		}
-		else {
-			if (this.namespaces.containsKey(name)) {
-				return createDynamicElementReader(name);
-			}
-			if (getRegistry().containsBeanDefinition(name)) {
-				GroovyBeanDefinitionWrapper beanDefinition = (GroovyBeanDefinitionWrapper)
-						getRegistry().getBeanDefinition(name).getAttribute(GroovyBeanDefinitionWrapper.class.getName());
-				if (beanDefinition != null) {
-					return new GroovyRuntimeBeanReference(name, beanDefinition, false);
-				}
-				else {
-					return new RuntimeBeanReference(name, false);
-				}
-			}
-			// This is to deal with the case where the property setter is the last
-			// statement in a closure (hence the return value)
-			else if (this.currentBeanDefinition != null) {
-				MutablePropertyValues pvs = this.currentBeanDefinition.getBeanDefinition().getPropertyValues();
-				if (pvs.contains(name)) {
-					return pvs.get(name);
-				}
-				else {
-					DeferredProperty dp = this.deferredProperties.get(this.currentBeanDefinition.getBeanName() + name);
-					if (dp != null) {
-						return dp.value;
-					}
-					else {
-						return getMetaClass().getProperty(this, name);
-					}
-				}
-			}
-			else {
-				return getMetaClass().getProperty(this, name);
-			}
-		}
-	}
+//	public Object getProperty(String name) {
+//		Binding binding = getBinding();
+//		if (binding != null && binding.hasVariable(name)) {
+//			return binding.getVariable(name);
+//		}
+//		else {
+//			if (this.namespaces.containsKey(name)) {
+//				return createDynamicElementReader(name);
+//			}
+//			if (getRegistry().containsBeanDefinition(name)) {
+//				GroovyBeanDefinitionWrapper beanDefinition = (GroovyBeanDefinitionWrapper)
+//						getRegistry().getBeanDefinition(name).getAttribute(GroovyBeanDefinitionWrapper.class.getName());
+//				if (beanDefinition != null) {
+//					return new GroovyRuntimeBeanReference(name, beanDefinition, false);
+//				}
+//				else {
+//					return new RuntimeBeanReference(name, false);
+//				}
+//			}
+//			// This is to deal with the case where the property setter is the last
+//			// statement in a closure (hence the return value)
+//			else if (this.currentBeanDefinition != null) {
+//				MutablePropertyValues pvs = this.currentBeanDefinition.getBeanDefinition().getPropertyValues();
+//				if (pvs.contains(name)) {
+//					return pvs.get(name);
+//				}
+//				else {
+//					DeferredProperty dp = this.deferredProperties.get(this.currentBeanDefinition.getBeanName() + name);
+//					if (dp != null) {
+//						return dp.value;
+//					}
+//					else {
+//						return getMetaClass().getProperty(this, name);
+//					}
+//				}
+//			}
+//			else {
+//				return getMetaClass().getProperty(this, name);
+//			}
+//		}
+//	}
 
-	private GroovyDynamicElementReader createDynamicElementReader(String namespace) {
-		XmlReaderContext readerContext = this.groovyDslXmlBeanDefinitionReader.createReaderContext(new DescriptiveResource(
-			"Groovy"));
-		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);
-		boolean decorating = (this.currentBeanDefinition != null);
-		if (!decorating) {
-			this.currentBeanDefinition = new GroovyBeanDefinitionWrapper(namespace);
-		}
-		return new GroovyDynamicElementReader(namespace, this.namespaces, delegate, this.currentBeanDefinition, decorating) {
-			@Override
-			protected void afterInvocation() {
-				if (!this.decorating) {
-					currentBeanDefinition = null;
-				}
-			}
-		};
-	}
+//	private GroovyDynamicElementReader createDynamicElementReader(String namespace) {
+//		XmlReaderContext readerContext = this.groovyDslXmlBeanDefinitionReader.createReaderContext(new DescriptiveResource(
+//			"Groovy"));
+//		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);
+//		boolean decorating = (this.currentBeanDefinition != null);
+//		if (!decorating) {
+//			this.currentBeanDefinition = new GroovyBeanDefinitionWrapper(namespace);
+//		}
+//		return new GroovyDynamicElementReader(namespace, this.namespaces, delegate, this.currentBeanDefinition, decorating) {
+//			@Override
+//			protected void afterInvocation() {
+//				if (!this.decorating) {
+//					currentBeanDefinition = null;
+//				}
+//			}
+//		};
+//	}
 
 
 	/**
@@ -837,6 +837,16 @@ public class GroovyBeanDefinitionReader extends AbstractBeanDefinitionReader imp
 				}
 			}
 		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see groovy.lang.GroovyObject#getProperty(java.lang.String)
+	 */
+	@Override
+	public Object getProperty(String propertyName) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Auto-generated method stub");
 	}
 
 }
