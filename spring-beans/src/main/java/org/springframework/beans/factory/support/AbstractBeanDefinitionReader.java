@@ -209,7 +209,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 			throw new BeanDefinitionStoreException(
 					"Cannot import bean definitions from location [" + location + "]: no ResourceLoader available");
 		}
-
+		//FileSystemXmlApplicationContext  继承了DefaultResourceLoader
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
@@ -232,7 +232,7 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 		}
 		else {
 			// Can only load single resources by absolute URL.
-			Resource resource = resourceLoader.getResource(location);
+			Resource resource = resourceLoader.getResource(location); //调用DefaultResourceLoader.getResource
 			int loadCount = loadBeanDefinitions(resource);
 			if (actualResources != null) {
 				actualResources.add(resource);

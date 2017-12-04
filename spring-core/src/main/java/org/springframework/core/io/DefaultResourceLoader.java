@@ -88,21 +88,21 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
-		if (location.startsWith("/")) {   //springÅäÖÃÎÄ¼şµÄÂ·¾¶ÒÔ¡°/¡±¿ªÍ·(linux»·¾³ÏÂ)
+		if (location.startsWith("/")) {  //springé…ç½®æ–‡ä»¶çš„è·¯å¾„ä»¥â€œ/â€å¼€å¤´(linuxç¯å¢ƒä¸‹) è°ƒå­ç±»çš„æ–¹æ³•è·å–é…ç½®æ–‡ä»¶: FileSystemXmlApplicationContext.getResourceByPath
 			return getResourceByPath(location);
 		}
-		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {   // //springÅäÖÃÎÄ¼şµÄÂ·¾¶ÒÔ¡°classpath¡±¿ªÍ·
+		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {   //springé…ç½®æ–‡ä»¶çš„è·¯å¾„ä»¥â€œclasspathâ€å¼€å¤´
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
-				// Try to parse the location as a URL...   // springÅäÖÃÎÄ¼şÎªÔ¶³ÌÍøÂç×ÊÔ´
-				URL url = new URL(location);
+				// Try to parse the location as a URL...   
+				URL url = new URL(location); // springé…ç½®æ–‡ä»¶ä¸ºè¿œç¨‹ç½‘ç»œèµ„æº
 				return new UrlResource(url);
 			}
 			catch (MalformedURLException ex) {
-				// No URL -> resolve as resource path.
-				return getResourceByPath(location);  //±¾µØwindowsÏµÍ³Æô¶¯Ê±ÅäÖÃÂ·¾¶ÒÔ¡°D:/¡±»òÕß¡°E:/¡±µÈµÈ¿ªÍ·
+				// No URL -> resolve as resource path.  //æœ¬åœ°windowsç³»ç»Ÿå¯åŠ¨æ—¶é…ç½®è·¯å¾„ä»¥â€œD:/â€æˆ–è€…â€œE:/â€ç­‰ç­‰å¼€å¤´ è°ƒå­ç±»çš„æ–¹æ³•è·å–é…ç½®æ–‡ä»¶ FileSystemXmlApplicationContext.getResourceByPath
+				return getResourceByPath(location);  
 			}
 		}
 	}

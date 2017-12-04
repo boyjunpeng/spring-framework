@@ -78,19 +78,19 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
-		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		// Create a new XmlBeanDefinitionReader for the given BeanFactory. //xml文件读取器
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
-		beanDefinitionReader.setEnvironment(this.getEnvironment());   //ʵ����һ�� StandardEnvironment
-		beanDefinitionReader.setResourceLoader(this);   //AbstractXmlApplicationContext �̳��� DefaultResourceLoader
+		beanDefinitionReader.setEnvironment(this.getEnvironment());   //ʵ��һ�� StandardEnvironment
+		beanDefinitionReader.setResourceLoader(this);   //AbstractXmlApplicationContext �̳��� DefaultResourceLoader
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
 		initBeanDefinitionReader(beanDefinitionReader);
-		loadBeanDefinitions(beanDefinitionReader);
+		loadBeanDefinitions(beanDefinitionReader);//加载xml配置文件
 	}
 
 	/**
@@ -122,7 +122,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);
 		}
-		String[] configLocations = getConfigLocations();
+		String[] configLocations = getConfigLocations();//获取配置文件路径：FileSystemXmlApplicationContext 构造器里面设置了xml文件路径
 		if (configLocations != null) {
 			reader.loadBeanDefinitions(configLocations);
 		}

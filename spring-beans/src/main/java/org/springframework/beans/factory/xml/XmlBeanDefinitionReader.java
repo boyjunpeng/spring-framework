@@ -317,7 +317,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			logger.info("Loading XML bean definitions from " + encodedResource.getResource());
 		}
 
-		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();//´Ó±¾µØthreadLocalÖĞ»ñÈ¡EncodedResource×ÊÔ´
+		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();//ä»æœ¬åœ°threadLocalä¸­è·å–EncodedResourceèµ„æº
 		if (currentResources == null) {
 			currentResources = new HashSet<EncodedResource>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
@@ -327,7 +327,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
 		try {
-			InputStream inputStream = encodedResource.getResource().getInputStream();//»ñÈ¡springµÄxmlÅäÖÃÎÄ¼şµÄ×Ö½ÚÁ÷
+			InputStream inputStream = encodedResource.getResource().getInputStream();//è·å–springçš„xmlé…ç½®æ–‡ä»¶çš„å­—èŠ‚æµ
 			try {
 				InputSource inputSource = new InputSource(inputStream);
 				if (encodedResource.getEncoding() != null) {
@@ -388,9 +388,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	protected int doLoadBeanDefinitions(InputSource inputSource, Resource resource)
 			throws BeanDefinitionStoreException {
 		try {
-			//½âÎöxmlÎÄµµ
+			//ï¿½ï¿½ï¿½ï¿½xmlï¿½Äµï¿½
 			Document doc = doLoadDocument(inputSource, resource);
-			return registerBeanDefinitions(doc, resource);   //½«Doc×ª»®ÎªIOCÈİÆ÷ÄÚ²¿µÄÊı¾İ½á¹¹
+			return registerBeanDefinitions(doc, resource);   //ï¿½ï¿½Doc×ªï¿½ï¿½ÎªIOCï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½İ½á¹¹
 		}
 		catch (BeanDefinitionStoreException ex) {
 			throw ex;
