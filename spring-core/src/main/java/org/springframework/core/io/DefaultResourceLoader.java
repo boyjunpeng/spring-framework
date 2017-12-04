@@ -88,21 +88,21 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
-		if (location.startsWith("/")) {
+		if (location.startsWith("/")) {   //spring配置文件的路径以“/”开头(linux环境下)
 			return getResourceByPath(location);
 		}
-		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {   // //spring配置文件的路径以“classpath”开头
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
-				// Try to parse the location as a URL...
+				// Try to parse the location as a URL...   // spring配置文件为远程网络资源
 				URL url = new URL(location);
 				return new UrlResource(url);
 			}
 			catch (MalformedURLException ex) {
 				// No URL -> resolve as resource path.
-				return getResourceByPath(location);
+				return getResourceByPath(location);  //本地windows系统启动时配置路径以“D:/”或者“E:/”等等开头
 			}
 		}
 	}

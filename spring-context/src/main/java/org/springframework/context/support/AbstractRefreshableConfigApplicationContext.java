@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AbstractRefreshableConfigApplicationContext extends AbstractRefreshableApplicationContext
 		implements BeanNameAware, InitializingBean {
-
+    //ÅäÖÃÎÄ¼şÂ·¾¶
 	private String[] configLocations;
 
 	private boolean setIdCalled = false;

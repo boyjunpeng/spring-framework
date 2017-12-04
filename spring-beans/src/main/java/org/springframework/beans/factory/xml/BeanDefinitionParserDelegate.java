@@ -443,7 +443,7 @@ public class BeanDefinitionParserDelegate {
 			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
 			aliases.addAll(Arrays.asList(nameArr));
 		}
-
+       //spring解析xml配置中的bean元素时，优先将bean的"id"作为bean的唯一标识，如果发现bean的"id"不存在，将bean的"name"属性中的第一个别名作为唯一标识并从别名数组中删除
 		String beanName = id;
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
 			beanName = aliases.remove(0);
@@ -456,7 +456,7 @@ public class BeanDefinitionParserDelegate {
 		if (containingBean == null) {
 			checkNameUniqueness(beanName, aliases, ele);
 		}
-
+        //对bean元素内部的配置进行详细的解析
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -466,7 +466,7 @@ public class BeanDefinitionParserDelegate {
 								beanDefinition, this.readerContext.getRegistry(), true);
 					}
 					else {
-						beanName = this.readerContext.generateBeanName(beanDefinition);
+						beanName = this.readerContext.generateBeanName(beanDefinition);   //xml中bean的定义信息中没有“id"和"name"的属性，就帮bean的名称作为默认的bean的唯一标识
 						// Register an alias for the plain bean class name, if still possible,
 						// if the generator returned the class name plus a suffix.
 						// This is expected for Spring 1.2/2.0 backwards compatibility.
@@ -534,9 +534,9 @@ public class BeanDefinitionParserDelegate {
 			if (ele.hasAttribute(PARENT_ATTRIBUTE)) {
 				parent = ele.getAttribute(PARENT_ATTRIBUTE);
 			}
-			AbstractBeanDefinition bd = createBeanDefinition(className, parent);
+			AbstractBeanDefinition bd = createBeanDefinition(className, parent);  //生产一个BeanDefinition对象，为载入bean定义信息准备
 
-			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
+			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd); //对bean定义中的属性进行解析，并设置description信息
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
 			parseMetaElements(ele, bd);

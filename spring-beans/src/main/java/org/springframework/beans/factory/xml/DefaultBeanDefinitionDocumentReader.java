@@ -91,7 +91,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		this.readerContext = readerContext;
 		logger.debug("Loading bean definitions");
 		Element root = doc.getDocumentElement();
-		doRegisterBeanDefinitions(root);
+		doRegisterBeanDefinitions(root);//将xml格式的doc注入IOC容器
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 
 		preProcessXml(root);
-		parseBeanDefinitions(root, this.delegate);
+		parseBeanDefinitions(root, this.delegate); //用xmlBean解析委托类解析bean定义
 		postProcessXml(root);
 
 		this.delegate = parent;
@@ -144,7 +144,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	protected BeanDefinitionParserDelegate createDelegate(
 			XmlReaderContext readerContext, Element root, BeanDefinitionParserDelegate parentDelegate) {
 
-		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);
+		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);  //创建XmlBeanDefinitionParser委托
 		delegate.initDefaults(root, parentDelegate);
 		return delegate;
 	}
@@ -183,7 +183,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
-			processBeanDefinition(ele, delegate);
+			processBeanDefinition(ele, delegate);  //处理xml中的<bean></bean>元素
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
@@ -292,7 +292,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
+		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele); //将Doc中的bean定义信息转化为BeanDefinition格式的数据并装载到BeanDefinitionHolder中
 		if (bdHolder != null) {
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {

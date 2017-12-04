@@ -317,7 +317,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			logger.info("Loading XML bean definitions from " + encodedResource.getResource());
 		}
 
-		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
+		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();//从本地threadLocal中获取EncodedResource资源
 		if (currentResources == null) {
 			currentResources = new HashSet<EncodedResource>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
@@ -327,7 +327,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
 		try {
-			InputStream inputStream = encodedResource.getResource().getInputStream();
+			InputStream inputStream = encodedResource.getResource().getInputStream();//获取spring的xml配置文件的字节流
 			try {
 				InputSource inputSource = new InputSource(inputStream);
 				if (encodedResource.getEncoding() != null) {
@@ -388,8 +388,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	protected int doLoadBeanDefinitions(InputSource inputSource, Resource resource)
 			throws BeanDefinitionStoreException {
 		try {
+			//解析xml文档
 			Document doc = doLoadDocument(inputSource, resource);
-			return registerBeanDefinitions(doc, resource);
+			return registerBeanDefinitions(doc, resource);   //将Doc转划为IOC容器内部的数据结构
 		}
 		catch (BeanDefinitionStoreException ex) {
 			throw ex;

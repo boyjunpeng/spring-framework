@@ -325,7 +325,7 @@ public class ContextLoader {
 						ApplicationContext parent = loadParentContext(servletContext);
 						cwac.setParent(parent);
 					}
-					configureAndRefreshWebApplicationContext(cwac, servletContext);
+					configureAndRefreshWebApplicationContext(cwac, servletContext);  //初始化spring容器
 				}
 			}
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
@@ -402,7 +402,7 @@ public class ContextLoader {
 			}
 		}
 		else {
-			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());
+			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());//spring-web模块下根路径中ContextLoader.properties配置文件中的配置信息
 			try {
 				return ClassUtils.forName(contextClassName, ContextLoader.class.getClassLoader());
 			}
