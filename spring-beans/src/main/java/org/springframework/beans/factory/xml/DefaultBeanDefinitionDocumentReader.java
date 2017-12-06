@@ -91,7 +91,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		this.readerContext = readerContext;
 		logger.debug("Loading bean definitions");
 		Element root = doc.getDocumentElement();
-		doRegisterBeanDefinitions(root);//½«xml¸ñÊ½µÄdoc×¢ÈëIOCÈİÆ÷
+		doRegisterBeanDefinitions(root);//è§£æxmlé…ç½®æ–‡ä»¶beançš„å®šä¹‰ä¿¡æ¯
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 
 		preProcessXml(root);
-		parseBeanDefinitions(root, this.delegate); //ÓÃxmlBean½âÎöÎ¯ÍĞÀà½âÎöbean¶¨Òå
+		parseBeanDefinitions(root, this.delegate); //è§£æxmlä¸­Beançš„å®šä¹‰ä¿¡æ¯
 		postProcessXml(root);
 
 		this.delegate = parent;
@@ -144,7 +144,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	protected BeanDefinitionParserDelegate createDelegate(
 			XmlReaderContext readerContext, Element root, BeanDefinitionParserDelegate parentDelegate) {
 
-		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);  //´´½¨XmlBeanDefinitionParserÎ¯ÍĞ
+		BeanDefinitionParserDelegate delegate = new BeanDefinitionParserDelegate(readerContext);  //åˆ›å»ºä¸€ä¸ªbeanå®šä¹‰è§£æå™¨çš„å§”æ‰˜å®ä¾‹
 		delegate.initDefaults(root, parentDelegate);
 		return delegate;
 	}
@@ -183,7 +183,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
-			processBeanDefinition(ele, delegate);  //´¦ÀíxmlÖĞµÄ<bean></bean>ÔªËØ
+			processBeanDefinition(ele, delegate);  //ï¿½ï¿½ï¿½ï¿½xmlï¿½Ğµï¿½<bean></bean>Ôªï¿½ï¿½
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
@@ -292,7 +292,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele); //½«DocÖĞµÄbean¶¨ÒåĞÅÏ¢×ª»¯ÎªBeanDefinition¸ñÊ½µÄÊı¾İ²¢×°ÔØµ½BeanDefinitionHolderÖĞ
+		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele); //ï¿½ï¿½Docï¿½Ğµï¿½beanï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢×ªï¿½ï¿½ÎªBeanDefinitionï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½İ²ï¿½×°ï¿½Øµï¿½BeanDefinitionHolderï¿½ï¿½
 		if (bdHolder != null) {
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {

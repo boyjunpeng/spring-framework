@@ -390,7 +390,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		try {
 			//获取xml配置文件的doc对象
 			Document doc = doLoadDocument(inputSource, resource);
-			return registerBeanDefinitions(doc, resource);   //��Docת��ΪIOC�����ڲ�����ݽṹ
+			return registerBeanDefinitions(doc, resource);   //将xml中bean的定义信息注册到ioc容器中
 		}
 		catch (BeanDefinitionStoreException ex) {
 			throw ex;
