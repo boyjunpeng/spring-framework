@@ -108,7 +108,7 @@ public class ReaderContext {
 	}
 
 	public void fireComponentRegistered(ComponentDefinition componentDefinition) {
-		this.eventListener.componentRegistered(componentDefinition);
+		this.eventListener.componentRegistered(componentDefinition);////eventListener = EmptyReaderEventListener 详细见XmlBeanDefinitionReader line :510   
 	}
 
 	public void fireAliasRegistered(String beanName, String alias, Object source) {

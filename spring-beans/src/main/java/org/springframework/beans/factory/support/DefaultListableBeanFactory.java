@@ -854,12 +854,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
-					this.beanDefinitionMap.put(beanName, beanDefinition);
+					this.beanDefinitionMap.put(beanName, beanDefinition); //将bean的id作为key，beanDefinition作为value放入ConcurrentHashMap中
 					List<String> updatedDefinitions = new ArrayList<String>(this.beanDefinitionNames.size() + 1);
 					updatedDefinitions.addAll(this.beanDefinitionNames);
 					updatedDefinitions.add(beanName);
 					this.beanDefinitionNames = updatedDefinitions;
-					if (this.manualSingletonNames.contains(beanName)) {
+					if (this.manualSingletonNames.contains(beanName)) { //手工设置的单例bean的name集合
 						Set<String> updatedSingletons = new LinkedHashSet<String>(this.manualSingletonNames);
 						updatedSingletons.remove(beanName);
 						this.manualSingletonNames = updatedSingletons;
@@ -875,7 +875,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.frozenBeanDefinitionNames = null;
 		}
 
-		if (oldBeanDefinition != null || containsSingleton(beanName)) {
+		if (oldBeanDefinition != null || containsSingleton(beanName)) {//如果beanDefinition信息已经存在或者beanName已经存在于已经实例化过的单例列表的时候 重置bean的定义
 			resetBeanDefinition(beanName);
 		}
 	}

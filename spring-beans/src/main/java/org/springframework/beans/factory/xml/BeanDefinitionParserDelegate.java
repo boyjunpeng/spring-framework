@@ -445,7 +445,7 @@ public class BeanDefinitionParserDelegate {
 		}
      
 		String beanName = id;
-		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {//如果<bean>定义中有定义id属性则优先将id属性作为beanName，否则取值name首先的第一个值作为beanName
+		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {//如果<bean>定义中有定义id属性则优先将id属性作为beanName，否则如果“name”属性不为空的话，取值name首先的第一个值作为beanName
 			beanName = aliases.remove(0);
 			if (logger.isDebugEnabled()) {
 				logger.debug("No XML 'id' specified - using '" + beanName +
@@ -465,8 +465,8 @@ public class BeanDefinitionParserDelegate {
 						beanName = BeanDefinitionReaderUtils.generateBeanName(
 								beanDefinition, this.readerContext.getRegistry(), true);
 					}
-					else {
-						beanName = this.readerContext.generateBeanName(beanDefinition);   //xml��bean�Ķ�����Ϣ��û�С�id"��"name"�����ԣ��Ͱ�bean�������ΪĬ�ϵ�bean��Ψһ��ʶ
+					else {//当<bean>标签中没有定义"id"和"name"的属性的时候会更加className产生一个beanName  普通的bean为  className#0 如果IOC容器中已存在则#后面自动增长
+						beanName = this.readerContext.generateBeanName(beanDefinition);   
 						// Register an alias for the plain bean class name, if still possible,
 						// if the generator returned the class name plus a suffix.
 						// This is expected for Spring 1.2/2.0 backwards compatibility.
@@ -474,7 +474,7 @@ public class BeanDefinitionParserDelegate {
 						if (beanClassName != null &&
 								beanName.startsWith(beanClassName) && beanName.length() > beanClassName.length() &&
 								!this.readerContext.getRegistry().isBeanNameInUse(beanClassName)) {
-							aliases.add(beanClassName);
+							aliases.add(beanClassName);  //如果beanName以beanClassName开头，并且beanName的长度大于beanClassName的长度同时BeanClassName未使用，将beanClassName作为bean的别名
 						}
 					}
 					if (logger.isDebugEnabled()) {
@@ -543,8 +543,8 @@ public class BeanDefinitionParserDelegate {
 			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
-			parseConstructorArgElements(ele, bd);
-			parsePropertyElements(ele, bd);
+			parseConstructorArgElements(ele, bd);//将构造器标签的配置信息注入beanDefinition
+			parsePropertyElements(ele, bd);//将property标签的配置信息注入beanDefinition
 			parseQualifierElements(ele, bd);
 
 			bd.setResource(this.readerContext.getResource());
@@ -741,7 +741,7 @@ public class BeanDefinitionParserDelegate {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node node = nl.item(i);
 			if (isCandidateElement(node) && nodeNameEquals(node, CONSTRUCTOR_ARG_ELEMENT)) {
-				parseConstructorArgElement((Element) node, bd);
+				parseConstructorArgElement((Element) node, bd);//constructor-arg <bean>元素的构造注入子标签  将构造器标签的元素注入到beanDefinition中
 			}
 		}
 	}
