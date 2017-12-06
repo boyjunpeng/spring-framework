@@ -435,17 +435,17 @@ public class BeanDefinitionParserDelegate {
 	 * {@link org.springframework.beans.factory.parsing.ProblemReporter}.
 	 */
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, BeanDefinition containingBean) {
-		String id = ele.getAttribute(ID_ATTRIBUTE);
-		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
+		String id = ele.getAttribute(ID_ATTRIBUTE);//获取bean定义信息中的“id”属性
+		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);//获取bean定义信息中的“name”属性
 
 		List<String> aliases = new ArrayList<String>();
 		if (StringUtils.hasLength(nameAttr)) {
-			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
+			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);//如果name属性的值有多个别名将别名放入到list
 			aliases.addAll(Arrays.asList(nameArr));
 		}
-       //spring����xml�����е�beanԪ��ʱ�����Ƚ�bean��"id"��Ϊbean��Ψһ��ʶ���������bean��"id"�����ڣ���bean��"name"�����еĵ�һ��������ΪΨһ��ʶ���ӱ���������ɾ��
+     
 		String beanName = id;
-		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
+		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {//如果<bean>定义中有定义id属性则优先将id属性作为beanName，否则取值name首先的第一个值作为beanName
 			beanName = aliases.remove(0);
 			if (logger.isDebugEnabled()) {
 				logger.debug("No XML 'id' specified - using '" + beanName +
@@ -454,9 +454,9 @@ public class BeanDefinitionParserDelegate {
 		}
 
 		if (containingBean == null) {
-			checkNameUniqueness(beanName, aliases, ele);
+			checkNameUniqueness(beanName, aliases, ele);//校验beanName的命名是否合法
 		}
-        //��beanԪ���ڲ������ý�����ϸ�Ľ���
+        //解析<bean>标签中定义的元素到AbstractBeanDefinition中
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
@@ -466,7 +466,7 @@ public class BeanDefinitionParserDelegate {
 								beanDefinition, this.readerContext.getRegistry(), true);
 					}
 					else {
-						beanName = this.readerContext.generateBeanName(beanDefinition);   //xml��bean�Ķ�����Ϣ��û�С�id"��"name"�����ԣ��Ͱ�bean��������ΪĬ�ϵ�bean��Ψһ��ʶ
+						beanName = this.readerContext.generateBeanName(beanDefinition);   //xml��bean�Ķ�����Ϣ��û�С�id"��"name"�����ԣ��Ͱ�bean�������ΪĬ�ϵ�bean��Ψһ��ʶ
 						// Register an alias for the plain bean class name, if still possible,
 						// if the generator returned the class name plus a suffix.
 						// This is expected for Spring 1.2/2.0 backwards compatibility.
@@ -522,21 +522,21 @@ public class BeanDefinitionParserDelegate {
 	public AbstractBeanDefinition parseBeanDefinitionElement(
 			Element ele, String beanName, BeanDefinition containingBean) {
 
-		this.parseState.push(new BeanEntry(beanName));
+		this.parseState.push(new BeanEntry(beanName));//将beanName包装为一个Entry推入栈内
 
 		String className = null;
-		if (ele.hasAttribute(CLASS_ATTRIBUTE)) {
+		if (ele.hasAttribute(CLASS_ATTRIBUTE)) {//获取<bean>元素中的class属性值
 			className = ele.getAttribute(CLASS_ATTRIBUTE).trim();
 		}
 
 		try {
 			String parent = null;
 			if (ele.hasAttribute(PARENT_ATTRIBUTE)) {
-				parent = ele.getAttribute(PARENT_ATTRIBUTE);
+				parent = ele.getAttribute(PARENT_ATTRIBUTE);//获取<bean>元素中的parent属性值
 			}
-			AbstractBeanDefinition bd = createBeanDefinition(className, parent);  //����һ��BeanDefinition����Ϊ����bean������Ϣ׼��
+			AbstractBeanDefinition bd = createBeanDefinition(className, parent); //更加class属性和parent属性初始创建BeanDefinition对象
 
-			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd); //��bean�����е����Խ��н�����������description��Ϣ
+			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd); //将<bean>标签中的其它属性解析并注入到BeanDefinition对象中
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
 			parseMetaElements(ele, bd);
@@ -578,10 +578,10 @@ public class BeanDefinitionParserDelegate {
 	public AbstractBeanDefinition parseBeanDefinitionAttributes(Element ele, String beanName,
 			BeanDefinition containingBean, AbstractBeanDefinition bd) {
 
-		if (ele.hasAttribute(SINGLETON_ATTRIBUTE)) {
+		if (ele.hasAttribute(SINGLETON_ATTRIBUTE)) {//是否是单例模式   老版本现在以及废弃  默认为单例
 			error("Old 1.x 'singleton' attribute in use - upgrade to 'scope' declaration", ele);
 		}
-		else if (ele.hasAttribute(SCOPE_ATTRIBUTE)) {
+		else if (ele.hasAttribute(SCOPE_ATTRIBUTE)) {//获取bean的作用域
 			bd.setScope(ele.getAttribute(SCOPE_ATTRIBUTE));
 		}
 		else if (containingBean != null) {
@@ -589,27 +589,29 @@ public class BeanDefinitionParserDelegate {
 			bd.setScope(containingBean.getScope());
 		}
 
-		if (ele.hasAttribute(ABSTRACT_ATTRIBUTE)) {
+		if (ele.hasAttribute(ABSTRACT_ATTRIBUTE)) { //获取abstract属性  是否为抽象类
 			bd.setAbstract(TRUE_VALUE.equals(ele.getAttribute(ABSTRACT_ATTRIBUTE)));
 		}
-
+		//lazy-init ApplicationContext实现的默认行为就是在启动时将所有singleton bean提前进行实例化 一个延迟初始化bean将告诉IoC 容器是在启动时还是在第一次被用到时实例化
 		String lazyInit = ele.getAttribute(LAZY_INIT_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(lazyInit)) {
 			lazyInit = this.defaults.getLazyInit();
 		}
 		bd.setLazyInit(TRUE_VALUE.equals(lazyInit));
-
-		String autowire = ele.getAttribute(AUTOWIRE_ATTRIBUTE);
+		String autowire = ele.getAttribute(AUTOWIRE_ATTRIBUTE);//autowire属性 自动装配
 		bd.setAutowireMode(getAutowireMode(autowire));
 
 		String dependencyCheck = ele.getAttribute(DEPENDENCY_CHECK_ATTRIBUTE);
-		bd.setDependencyCheck(getDependencyCheck(dependencyCheck));
+		bd.setDependencyCheck(getDependencyCheck(dependencyCheck));//dependency-check 属性
 
-		if (ele.hasAttribute(DEPENDS_ON_ATTRIBUTE)) {
+		if (ele.hasAttribute(DEPENDS_ON_ATTRIBUTE)) {//depends-on属性   depend-on用来表示一个Bean的实例化依靠另一个Bean先实例化
 			String dependsOn = ele.getAttribute(DEPENDS_ON_ATTRIBUTE);
 			bd.setDependsOn(StringUtils.tokenizeToStringArray(dependsOn, MULTI_VALUE_ATTRIBUTE_DELIMITERS));
 		}
-
+       /**autowire-candidate 属性解释 是否可以作为被自动装配的候选bean
+        * Spring在实例化这个bean的时候会在容器中查找匹配的bean对autowire bean进行属性注入，这些被查找的bean我们称为候选bean。
+		作为候选bean，我凭什么就要被你用，老子不给你用。所以候选bean给自己增加了autowire-candidate="false"属性（默认是true），
+		那么容器就不会把这个bean当做候选bean了**/
 		String autowireCandidate = ele.getAttribute(AUTOWIRE_CANDIDATE_ATTRIBUTE);
 		if ("".equals(autowireCandidate) || DEFAULT_VALUE.equals(autowireCandidate)) {
 			String candidatePattern = this.defaults.getAutowireCandidates();
@@ -622,11 +624,11 @@ public class BeanDefinitionParserDelegate {
 			bd.setAutowireCandidate(TRUE_VALUE.equals(autowireCandidate));
 		}
 
-		if (ele.hasAttribute(PRIMARY_ATTRIBUTE)) {
+		if (ele.hasAttribute(PRIMARY_ATTRIBUTE)) {//primary属性  bean在进行自动装配的时候是否作为优先考虑的候选bean
 			bd.setPrimary(TRUE_VALUE.equals(ele.getAttribute(PRIMARY_ATTRIBUTE)));
 		}
 
-		if (ele.hasAttribute(INIT_METHOD_ATTRIBUTE)) {
+		if (ele.hasAttribute(INIT_METHOD_ATTRIBUTE)) {//init-method bean初始化完成之后需要立刻执行的方法
 			String initMethodName = ele.getAttribute(INIT_METHOD_ATTRIBUTE);
 			if (!"".equals(initMethodName)) {
 				bd.setInitMethodName(initMethodName);
@@ -638,7 +640,7 @@ public class BeanDefinitionParserDelegate {
 				bd.setEnforceInitMethod(false);
 			}
 		}
-
+		//destroy-method IOC容器销毁之前需要执行的方法
 		if (ele.hasAttribute(DESTROY_METHOD_ATTRIBUTE)) {
 			String destroyMethodName = ele.getAttribute(DESTROY_METHOD_ATTRIBUTE);
 			bd.setDestroyMethodName(destroyMethodName);
@@ -649,11 +651,11 @@ public class BeanDefinitionParserDelegate {
 				bd.setEnforceDestroyMethod(false);
 			}
 		}
-
+		//factory-method  当bean为一个工厂bean的时候指定bean的工厂方法
 		if (ele.hasAttribute(FACTORY_METHOD_ATTRIBUTE)) {
 			bd.setFactoryMethodName(ele.getAttribute(FACTORY_METHOD_ATTRIBUTE));
 		}
-		if (ele.hasAttribute(FACTORY_BEAN_ATTRIBUTE)) {
+		if (ele.hasAttribute(FACTORY_BEAN_ATTRIBUTE)) {//factory-bean  指定bean是否为一个工厂bean
 			bd.setFactoryBeanName(ele.getAttribute(FACTORY_BEAN_ATTRIBUTE));
 		}
 

@@ -162,7 +162,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
-						parseDefaultElement(ele, delegate);
+						parseDefaultElement(ele, delegate);//解析默认命名空间的元素
 					}
 					else {
 						delegate.parseCustomElement(ele);
@@ -176,16 +176,16 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	}
 
 	private void parseDefaultElement(Element ele, BeanDefinitionParserDelegate delegate) {
-		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {
-			importBeanDefinitionResource(ele);
+		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {//解析<import/>标签
+			importBeanDefinitionResource(ele);//加载import的xml配置文件信息
 		}
 		else if (delegate.nodeNameEquals(ele, ALIAS_ELEMENT)) {
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
-			processBeanDefinition(ele, delegate);  //����xml�е�<bean></bean>Ԫ��
+			processBeanDefinition(ele, delegate);  //解析<bean/>标签
 		}
-		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
+		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {//解析<beans/>标签
 			// recurse
 			doRegisterBeanDefinitions(ele);
 		}
@@ -292,7 +292,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
-		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele); //��Doc�е�bean������Ϣת��ΪBeanDefinition��ʽ����ݲ�װ�ص�BeanDefinitionHolder��
+		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele); //将Element对象的bean定义信息解析到BeanDefinitionHolder中
 		if (bdHolder != null) {
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
