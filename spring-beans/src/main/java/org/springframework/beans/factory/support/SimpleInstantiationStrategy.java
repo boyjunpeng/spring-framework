@@ -86,7 +86,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					}
 				}
 			}
-			return BeanUtils.instantiateClass(constructorToUse);
+			return BeanUtils.instantiateClass(constructorToUse);//获取到bean的构造器之后用beanUtils进行实例化bean对象
 		}
 		else {
 			// Must generate CGLIB subclass.
