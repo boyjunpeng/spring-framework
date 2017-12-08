@@ -312,7 +312,7 @@ public class ContextLoader {
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
 			if (this.context == null) {
-				this.context = createWebApplicationContext(servletContext);
+				this.context = createWebApplicationContext(servletContext);//åˆ›å»ºXmlWebApplicationContext
 			}
 			if (this.context instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) this.context;
@@ -325,7 +325,7 @@ public class ContextLoader {
 						ApplicationContext parent = loadParentContext(servletContext);
 						cwac.setParent(parent);
 					}
-					configureAndRefreshWebApplicationContext(cwac, servletContext);  //³õÊ¼»¯springÈİÆ÷
+					configureAndRefreshWebApplicationContext(cwac, servletContext);  //åˆå§‹åŒ–IOCå®¹å™¨
 				}
 			}
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
@@ -374,7 +374,7 @@ public class ContextLoader {
 	 * @see ConfigurableWebApplicationContext
 	 */
 	protected WebApplicationContext createWebApplicationContext(ServletContext sc) {
-		Class<?> contextClass = determineContextClass(sc);
+		Class<?> contextClass = determineContextClass(sc);//æ ¹æ®Servletä¸­çš„é…ç½®å†³å®šç”¨é‚£ä¸ªIOCå®¹å™¨
 		if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
 			throw new ApplicationContextException("Custom context class [" + contextClass.getName() +
 					"] is not of type [" + ConfigurableWebApplicationContext.class.getName() + "]");
@@ -401,8 +401,8 @@ public class ContextLoader {
 						"Failed to load custom context class [" + contextClassName + "]", ex);
 			}
 		}
-		else {
-			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());//spring-webÄ£¿éÏÂ¸ùÂ·¾¶ÖĞContextLoader.propertiesÅäÖÃÎÄ¼şÖĞµÄÅäÖÃĞÅÏ¢
+		else {//spring-webæ¨¡å—ä¸‹æ ¹è·¯å¾„ä¸­ContextLoader.propertiesé…ç½®æ–‡ä»¶ä¸­çš„é…ç½®ä¿¡æ¯
+			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());
 			try {
 				return ClassUtils.forName(contextClassName, ContextLoader.class.getClassLoader());
 			}
@@ -429,7 +429,7 @@ public class ContextLoader {
 		}
 
 		wac.setServletContext(sc);
-		String configLocationParam = sc.getInitParameter(CONFIG_LOCATION_PARAM);
+		String configLocationParam = sc.getInitParameter(CONFIG_LOCATION_PARAM);//è¯»å–web.xmlä¸­çš„init-param å‚æ•° contextConfigLocation
 		if (configLocationParam != null) {
 			wac.setConfigLocation(configLocationParam);
 		}
@@ -443,7 +443,7 @@ public class ContextLoader {
 		}
 
 		customizeContext(sc, wac);
-		wac.refresh();
+		wac.refresh();//æ‰§è¡Œåˆå§‹åŒ–
 	}
 
 	/**

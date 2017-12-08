@@ -134,15 +134,15 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final String INFER_METHOD = "(inferred)";
 
 
-	private volatile Object beanClass;
+	private volatile Object beanClass;//bean对应的class对象
 
-	private String scope = SCOPE_DEFAULT;
+	private String scope = SCOPE_DEFAULT;//作用域
 
 	private boolean abstractFlag = false;
 
-	private boolean lazyInit = false;
+	private boolean lazyInit = false;// 是否需要延迟实例化bean
 
-	private int autowireMode = AUTOWIRE_NO;
+	private int autowireMode = AUTOWIRE_NO;//自动装配模式
 
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
 
